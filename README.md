@@ -29,6 +29,14 @@ Cloudflare Pages deployment (recommended)
    - Environment variable: HUGO_VERSION=0.146.0
 3) Add the custom domain (hashnhedge.com) and follow DNS instructions.
 
+Automation (cron in US Central Time)
+- Example crontab entry using CRON_TZ for Central Time (no system timezone change needed):
+  CRON_TZ=America/Chicago
+  0 13 * * * cd /home/gnul/projects/hashnhedge/hashnhedge/site && /bin/bash -lc 'source .venv/bin/activate && make fetch draft publish' >> var/cron.log 2>&1
+- To install:
+  crontab -e
+  # paste the two lines above
+
 Hugo config notes
 - baseURL: https://hashnhedge.com/
 - Pagination: [pagination].pagerSize = 12

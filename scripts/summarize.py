@@ -4,8 +4,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-MODEL = "qwen2.5:7b-instruct"
-TEMP = "0.3"
+import os
+MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b-instruct")
+TEMP = os.getenv("OLLAMA_TEMP", "0.3")
 
 PROMPT = f"""You are an SEO news editor.
 Inputs: a list of source headlines and links with snippets.
