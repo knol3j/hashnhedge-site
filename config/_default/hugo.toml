@@ -1,0 +1,34 @@
+baseURL = "https://hashnhedge.com/"
+title = "Hash n Hedge"
+languageCode = "en-us"
+theme = "PaperMod"
+enableRobotsTXT = true
+canonifyURLs = true
+enableGitInfo = true
+buildDrafts = false
+timeout = "120s"
+[pagination]
+  pagerSize = 12
+[permalinks]
+  posts = "/:year/:month/:day/:slug/"
+[minify]
+  [minify.tdewolff.html]
+    keepWhitespace = false
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+[privacy]
+  [privacy.googleAnalytics]
+    anonymizeIP = true
+
+[params]
+  # Ads config: controlled via params and environment.
+  [params.ads]
+    enabled = true             # enable ads in production (script still requires a client id)
+    client_id = "ca-pub-876996253611"
+    # Optional default slots; can be overridden per shortcode use
+    slot_in_article_top = "1234567890"
+    slot_in_article_mid = "1234567891"
+
+  # News section configuration for JSON-LD inclusion
+  [params.news]
+    section = "news"

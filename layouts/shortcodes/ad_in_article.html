@@ -1,0 +1,14 @@
+{{/* Responsive in-article ad. Usage in content: {{< ad_in_article slot="1234567890" >}} */}}
+{{ $adsEnabled := and (site.Params.ads.enabled) (or (hugo.IsProduction) (eq (getenv "ADS_ENABLED") "1")) }}
+{{ if $adsEnabled }}
+  {{ $slot := or (.Get "slot") site.Params.ads.slot_in_article_mid }}
+  <ins class="adsbygoogle" style="display:block; text-align:center; min-height: 180px"
+       data-ad-layout="in-article"
+       data-ad-format="fluid"
+       data-ad-client="{{ site.Params.ads.client_id }}"
+       data-ad-slot="{{ $slot }}"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+{{ else }}
+  {{/* Placeholder to preserve layout during development / when ads disabled */}}
+  <div style="display:block; text-align:center; min-height: 180px; opacity: .25; border: 1px dashed #ccc">Ad placeholder</div>
+{{ end }}

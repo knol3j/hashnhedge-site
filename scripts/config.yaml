@@ -1,0 +1,36 @@
+site:
+  base_url: "https://hashnhedge.com"
+  author: "Hash n Hedge Staff"
+content:
+  daily_target: 12
+  min_words: 600
+  max_words: 900
+  review_required: true
+  drafts_dir: "content/drafts"
+  posts_dir: "content/posts"
+  og_dir: "static/images/og"
+  categories: ["Cybersecurity","AI","Fintech","Linux","Crypto","Markets","Macro","Tech"]
+ai:
+  provider: "ollama"
+  model: "llama3.1:8b"
+  temperature: 0.7
+  top_p: 0.9
+  max_tokens: 1024
+sources:
+  rss:
+    - "https://krebsonsecurity.com/feed/"
+    - "https://feeds.feedburner.com/TheHackersNews"
+    - "https://www.bleepingcomputer.com/feed/"
+    - "https://www.cisa.gov/cybersecurity-advisories/rss.xml"
+    - "https://nvd.nist.gov/feeds/xml/cve/misc/nvd-rss-analyzed.xml"
+    - "https://ai.googleblog.com/feeds/posts/default?alt=rss"
+    - "https://openai.com/blog/rss.xml"
+    - "https://huggingface.co/blog/feed.xml"
+    - "https://www.reuters.com/markets/technology/rss"
+    - "https://www.coindesk.com/arc/outboundfeeds/rss/"
+    - "https://cointelegraph.com/rss"
+    - "https://phoronix.com/rss.php"
+    - "https://lwn.net/headlines/rss"
+  blocklist_keywords: ["opinion","sponsored","podcast"]
+store:
+  dedup_db: "data/dedup.sqlite"

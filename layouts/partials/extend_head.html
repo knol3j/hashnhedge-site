@@ -1,0 +1,31 @@
+{{/*
+  This partial is auto-included by PaperMod's head.html.
+  - Injects AdSense script only when ads are enabled and in production (or ADS_ENABLED=1).
+  - Injects NewsArticle JSON-LD for pages in the configured news section.
+*/}}
+
+{{/* Consent Mode v2: default denied until a CMP or banner updates consent. */}}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('consent','default',{
+    'ad_storage':'denied',
+    'ad_user_data':'denied',
+    'ad_personalization':'denied',
+    'analytics_storage':'denied'
+  });
+</script>
+
+{{/* Hugo security blocks getenv by default; rely solely on site params. */}}
+{{ $adsEnabled := and (site.Params.ads.enabled) (hugo.IsProduction) }}
+{{ $client := site.Params.ads.client_id }}
+
+{{ if and $adsEnabled $client }}
+  cscript async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $client }}" crossorigin="anonymous"ec/scripte
+{{ end }}
+
+{{/* NewsArticle JSON-LD only on single pages within the news section */}}
+{{ $newsSection := default "news" site.Params.news.section }}
+{{ if and .IsPage (eq .Section $newsSection) }}
+  {{ partial "news_article.jsonld.html" . }}
+{{ end }}

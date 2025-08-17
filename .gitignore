@@ -1,0 +1,33 @@
+# Hugo build outputs
+/public/
+/resources/
+.hugo_build.lock
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Node / tooling
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Python venv and caches
+.venv/
+__pycache__/
+*.pyc
+
+# Logs and dumps
+logs/
+*.log
+*.tmp
+
+# Env files
+.env
+.env.*
+
+# Submodule build artifacts (none by default)
+# themes/*/node_modules/
