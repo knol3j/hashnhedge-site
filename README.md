@@ -1,0 +1,2 @@
+# hashnhedge
+news site
