@@ -1,0 +1,21 @@
+categories:
+  core:
+    - name: Google Search Central
+      url: https://developers.google.com/search/blog.rss
+    - name: Search Engine Roundtable
+      url: https://www.seroundtable.com/rss.xml
+    - name: Search Engine Land
+      url: https://searchengineland.com/feed
+    - name: Bing Webmaster Blog
+      url: https://blogs.bing.com/webmaster/feed
+    - name: Google Ads
+      url: https://blog.google/products/ads/rss/
+    - name: Google AI Blog
+      url: https://ai.googleblog.com/feeds/posts/default
+    - name: Yoast SEO
+      url: https://yoast.com/feed/
+    - name: Ahrefs Blog
+      url: https://ahrefs.com/blog/rss/
+    - name: Semrush Blog
+      url: https://www.semrush.com/blog/rss/
+
