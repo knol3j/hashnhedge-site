@@ -4,12 +4,24 @@
   - Injects NewsArticle JSON-LD for pages in the configured news section.
 */}}
 
-{{ $adsEnabled := and (site.Params.ads.enabled) (or (hugo.IsProduction) (eq (getenv "ADS_ENABLED") "1")) }}
+{{/* Consent Mode v2: default denied until a CMP or banner updates consent. */}}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('consent','default',{
+    'ad_storage':'denied',
+    'ad_user_data':'denied',
+    'ad_personalization':'denied',
+    'analytics_storage':'denied'
+  });
+</script>
 
-{{ if $adsEnabled }}
-  {{ with site.Params.ads.client_id }}
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ . }}" crossorigin="anonymous"></script>
-  {{ end }}
+{{/* Hugo security blocks getenv by default; rely solely on site params. */}}
+{{ $adsEnabled := and (site.Params.ads.enabled) (hugo.IsProduction) }}
+{{ $client := site.Params.ads.client_id }}
+
+{{ if and $adsEnabled $client }}
+  cscript async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $client }}" crossorigin="anonymous"ec/scripte
 {{ end }}
 
 {{/* NewsArticle JSON-LD only on single pages within the news section */}}

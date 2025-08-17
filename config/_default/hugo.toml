@@ -23,8 +23,8 @@ timeout = "120s"
 [params]
   # Ads config: controlled via params and environment.
   [params.ads]
-    enabled = true             # ads enabled; update client_id when available
-    client_id = "ca-pub-REPLACE_ME"
+    enabled = true             # enable ads in production (script still requires a client id)
+    client_id = "ca-pub-876996253611"
     # Optional default slots; can be overridden per shortcode use
     slot_in_article_top = "1234567890"
     slot_in_article_mid = "1234567891"
