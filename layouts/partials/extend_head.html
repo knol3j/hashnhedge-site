@@ -16,12 +16,12 @@
   });
 </script>
 
-{{/* Hugo security blocks getenv by default; rely solely on site params. */}}
+{{/* Use only site params and production flag; no getenv to satisfy Hugo security policy. */}}
 {{ $adsEnabled := and (site.Params.ads.enabled) (hugo.IsProduction) }}
 {{ $client := site.Params.ads.client_id }}
 
 {{ if and $adsEnabled $client }}
-  cscript async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $client }}" crossorigin="anonymous"ec/scripte
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $client }}" crossorigin="anonymous"></script>
 {{ end }}
 
 {{/* NewsArticle JSON-LD only on single pages within the news section */}}
@@ -29,3 +29,122 @@
 {{ if and .IsPage (eq .Section $newsSection) }}
   {{ partial "news_article.jsonld.html" . }}
 {{ end }}
+
+{{/* Lightweight consent banner injected via JS to avoid editing theme base templates */}}
+<script>
+(function(){
+  try {
+    var KEY = 'consent:ads:v2';
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e) {}
+    if (saved && (saved.status === 'granted' || saved.status === 'denied')) {
+      // Apply stored choice at startup
+      if (typeof gtag === 'function') {
+        var st = saved.status === 'granted' ? 'granted' : 'denied';
+        gtag('consent','update',{
+          ad_storage: st,
+          ad_user_data: st,
+          ad_personalization: st,
+          analytics_storage: st
+        });
+      }
+      return;
+    }
+
+    // Create banner
+    var bar = document.createElement('div');
+    bar.setAttribute('role','dialog');
+    bar.setAttribute('aria-live','polite');
+    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#111;color:#fff;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;box-shadow:0 -2px 8px rgba(0,0,0,.3);font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;';
+
+    var msg = document.createElement('div');
+    msg.textContent = 'We use cookies for ads and analytics. You can accept or reject. You can change your choice later in your browser storage.';
+    msg.style.flex = '1 1 auto';
+    msg.style.marginRight = '12px';
+
+    var actions = document.createElement('div');
+    actions.style.display = 'flex';
+    actions.style.gap = '8px';
+
+    function applyConsent(status){
+      try { localStorage.setItem(KEY, JSON.stringify({ status: status, ts: Date.now() })); } catch(e) {}
+      if (typeof gtag === 'function') {
+        var st = status === 'granted' ? 'granted' : 'denied';
+        gtag('consent','update',{
+          ad_storage: st,
+          ad_user_data: st,
+          ad_personalization: st,
+          analytics_storage: st
+        });
+      }
+      if (bar && bar.parentNode) bar.parentNode.removeChild(bar);
+    }
+
+    var accept = document.createElement('button');
+    accept.type = 'button';
+    accept.textContent = 'Accept';
+    accept.style.cssText = 'background:#22c55e;color:#000;border:none;border-radius:4px;padding:8px 12px;cursor:pointer;font-weight:600;';
+    accept.addEventListener('click', function(){ applyConsent('granted'); });
+
+    var reject = document.createElement('button');
+    reject.type = 'button';
+    reject.textContent = 'Reject';
+    reject.style.cssText = 'background:#e5e7eb;color:#000;border:none;border-radius:4px;padding:8px 12px;cursor:pointer;';
+    reject.addEventListener('click', function(){ applyConsent('denied'); });
+
+    actions.appendChild(reject);
+    actions.appendChild(accept);
+
+    bar.appendChild(msg);
+    bar.appendChild(actions);
+
+    function inject(){
+      if (!document.body) { return void setTimeout(inject, 50); }
+      document.body.appendChild(bar);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', inject);
+    } else {
+      inject();
+    }
+  } catch (e) {
+    // fail silently
+  }
+})();
+</script>
+
+{{/* Footer link to reopen cookie settings (clears stored consent and reloads) */}}
+<script>
+(function(){
+  function addFooterLink(){
+    var footer = document.querySelector('footer');
+    var parent = footer || document.body;
+    var container = document.createElement('div');
+    container.style.marginTop = '8px';
+    var link = document.createElement('a');
+    link.href = '#cookies';
+    link.textContent = 'Cookie settings';
+    link.rel = 'nofollow';
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      try { localStorage.removeItem('consent:ads:v2'); } catch(e){}
+      if (typeof gtag === 'function') {
+        gtag('consent','update',{
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied'
+        });
+      }
+      location.reload();
+    });
+    container.appendChild(link);
+    parent.appendChild(container);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addFooterLink);
+  } else {
+    addFooterLink();
+  }
+})();
+</script>
